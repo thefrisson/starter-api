@@ -2,6 +2,7 @@ from flask import Blueprint, Response, request, jsonify, make_response, render_t
 from flask_restful import Resource, Api
 from . import r
 import uuid
+import json
 from pydo import Client as DO
 
 
@@ -12,6 +13,7 @@ class Login(Resource):
     def post(self):
         login_request_id = str(uuid.uuid4())
         data = request.get_json()
+        data = json.loads(data)
         token = data['token']
         r.set(login_request_id + "/email", data["email"])
         r.set(login_request_id + "/token", token)
