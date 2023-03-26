@@ -11,7 +11,7 @@ r = redis.Redis(
 	host=os.environ.get('REDIS_HOST'),
   	port=os.environ.get('REDIS_PORT'),
   	password=os.environ.get('REDIS_PASSWORD')
-  	)
+)
 
 db = SQLAlchemy()
 
@@ -22,6 +22,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret_key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = True
 
     db.init_app(app)
 
@@ -33,12 +34,12 @@ def create_app():
     app.register_blueprint(api_endpoints, url_prefix = '/')
     #app.register_blueprint(views, url_prefix = "/")
     
-    from .models import User
+    # from .models import User
 
-    @app.before_first_request
-    def create_tables():
-        db.create_all()
-        print("Created Database!")
+    # @app.before_first_request
+    # def create_tables():
+    #     db.create_all()
+    #     print("Created Database!")
     
 
     

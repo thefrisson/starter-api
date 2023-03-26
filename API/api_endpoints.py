@@ -1,19 +1,28 @@
 from flask import Blueprint, Response, request, jsonify, make_response, render_template_string
 from flask_restful import Resource, Api
-from .models import User
-from . import db
+from . import r
+import uuid
+from pydo import Client as DO
 
 
 api_endpoints = Blueprint('api_endpoints', __name__)
 api = Api(api_endpoints)
 
-class HelloWorld(Resource):
-    def get(self):
-        return render_template_string("Hello World!")
+class Login(Resource):
+    def post(self):
+        login_request_id = str(uuid.uuid4())
+        data = request.get_json()
+        token = data['token']
+        r.set(login_request_id + "/email", data["email"])
+        r.set(login_request_id + "/token", token)
+        
+        do = DO(token = token)
+        user = do.account.get(headers = {"Content-Type": "application/json"})
+        return user
 
-class HealthCheck(Resource):
-    def get(self):
-        return Response(status=200)
 
-api.add_resource(HelloWorld, '/')
-api.add_resource(HealthCheck, '/check')
+
+
+
+api.add_resource(Login, '/login')
+
