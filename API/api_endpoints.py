@@ -15,8 +15,8 @@ class Login(Resource):
         data = request.get_json()
         data = json.loads(data)
         token = data['token']
-        r.set(login_request_id + "/email", data["email"])
-        r.set(login_request_id + "/token", token)
+        # r.set(login_request_id + "/email", data["email"])
+        # r.set(login_request_id + "/token", token)
         
         do = DO(token = token)
         user = do.account.get(headers = {"Content-Type": "application/json"})
